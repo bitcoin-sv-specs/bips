@@ -11,8 +11,8 @@ This BIP describes a protocol for communication between a payment host (usually
 either a merchant, a payment processor, or simply the recipient's wallet) and
 their customer (the sender of the funds), enabling both a better customer
 experience, simpler wallet infrastructure, more advanced features such as
-multiple outputs, and better security against man-in-the-middle attacks on the
-payment process.
+multiple outputs, alternative outputs, payments with non-BSV tokens, 
+and better security against man-in-the-middle attacks on the payment process.
 
 This BIP is a simplified update to BIP 70 with a few important differences.
 First, we have switched from protobufs (protocol buffers) to JSON. Second, we
@@ -82,6 +82,7 @@ There are several JSON objects used in the protocol. We start with a summary of
 the JSON objects, and then proceed to the details.
 
 * Output: A way of specifying a Bitcoin transaction output, including the value and script.
+* TokenMetadata: A way of specifying the details of token used in output if non-BSV output is used.
 * PaymentRequest: A way of specifying the details of a required payment, including a list of outputs, expiration data, and other meta data.
 * Payment: Includes a signed Bitcoin transaction.
 * PaymentAck: Acknowledgement of receipt of payment.
@@ -103,6 +104,7 @@ Output {
   amount // number. required.
   script // string. required. hexadecimal script.
   description // string. optional. must not have JSON string length of greater than 100.
+  tokenMetadata // TokenMetadata object. optional. 
 }
 </pre>
 
@@ -112,6 +114,28 @@ Output {
 | script || A "TxOut" script where payment should be sent, formatted as a hexadecimal string.
 |-
 | description || An optional description such as "tip" or "sales tax". Maximum length is 50 characters.
+|-
+| tokenMetadata || An optional object used when above amount and script is not native-satoshi but tokenized one.
+|}
+
+===TokenMetadata===
+
+TokenMetada is used in the output to specify which non-BSV token is to be used. The most important is the script in the output which defines which token shall be used but TokenMetadata might be useful for wallets to easily identify a token, checks the user balance of it, show a proper icon, etc.
+
+<pre>
+TokenMetadata {
+  protocolID // string. required.
+  tokenID // string. required.
+  description // string. optional 
+}
+</pre>
+
+{|
+| protocolID || Identificator of specific token protocol e.g. STAS.
+|-
+| tokenID || Uniqie identificator of specific issued token along the protocol.
+|-
+| description || An optional description such as "Beer token used to redeem it for a glasss of real XYZ beer".
 |}
 
 ===PaymentRequest===
@@ -122,6 +146,7 @@ A payment request contains the informtion the consumer needs to make the payment
 PaymentRequest {
     network // string. required. always set to "bitcoin".
     outputs // an array of outputs. required, but can have zero elements.
+    alternativeOutputs // an array of arrays of outputs. optional.
     creationTimestamp // number. required.
     expirationTimestamp // number. optional.
     memo // string. optional.
@@ -133,6 +158,8 @@ PaymentRequest {
 | network || This field is required and always set to "bitcoin". If set to any other value besides "bitcoin", no wallet should process the payments. For test purposes, one can set this field to "test" which will ensure that no wallet will accidentally send a payment to what might be invalid or test addresses.
 |-
 | outputs || One or more outputs where Bitcoins are to be sent.
+|-
+| alternativeOutputs || If it is non-empty it informs about possible alternative payment options. The first level array is a list of different payment options and the second level array is a list of outputs for the option. It is helpful to allow customer to pay e.g. with BSV or equivalent in some token or a combination of outputs such as 50% of BSV equivalent AND a token representing a 50% off voucher.
 |-
 | creationTimestamp || Unix timestamp (seconds since 1-Jan-1970 UTC) when the PaymentRequest was created.
 |-
