@@ -7,7 +7,7 @@
 
 ==Abstract==
 
-This BIP describes an extension to the bitcoin: URI scheme (BIP 3) to
+This BIP describes additional scheme beside the bitcoin: URI scheme (BIP 3) to
 support the simplified payment protocol (BIP 270).
 
 ==Motivation==
@@ -18,21 +18,18 @@ bitcoin wallets.
 
 ==Specification==
 
-The bitcoin: URI scheme is extended with an additional, optional
-"r" parameter, whose value is a URL from which a PaymentRequest
+The pay: URI scheme is introduced. It could have the same prefix like in BIP3 (bitcoin:)
+but the proposed one is more generic and fits better for multi-currency wallets.
+
+The scheme requires one "r" parameter, whose value is a URL from which a PaymentRequest
 message should be fetched (characters not allowed within the scope
 of a query parameter must be percent-encoded as described in RFC 3986
 and bip-0003).
 
-If the "r" parameter is provided and backwards compatibility
-is not required, then the bitcoin address portion of the URI may be
-omitted (the URI will be of the form: bitcoin:?r=... ).
-
 When Bitcoin wallet software that supports this BIP receives a
-bitcoin: URI with a request parameter, it should ignore the bitcoin
-address/amount/label/message in the URI and instead fetch a
+pay: URI with a request parameter, it should fetch a
 PaymentRequest message and then follow the payment protocol, as
-described in BIP 70.
+described in BIP 270.
 
 Bitcoin wallets must support fetching PaymentRequests via the
 HTTPS protocol; they may support other protocols. Wallets must
@@ -49,17 +46,12 @@ redirect) should be handled as outlined in RFC 2616.
 
 ==Compatibility==
 
-Wallet software that does not support this BIP will simply ignore the
-r parameter and will initiate a payment to bitcoin address.
+This BIP is not compatible with the original one (BIP3) and Wallet software that does not support this BIP
+cannot proceed with a payment. 
 
 ==Examples==
-A backwards-compatible request:
 <pre>
-bitcoin:mq7se9wy2egettFxPbmn99cK8v5AFq55Lx?sv&amount=0.11&r=https://merchant.com/pay.php?h%3D2a8628fc2fbe
-</pre>
-Non-backwards-compatible equivalent:
-<pre>
-bitcoin:?sv&r=https://merchant.com/pay.php?h%3D2a8628fc2fbe
+pay:?sv&r=https://merchant.com/pay.php?h%3D2a8628fc2fbe
 </pre>
 
 ==References==
