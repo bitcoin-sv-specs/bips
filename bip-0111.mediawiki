@@ -1,10 +1,13 @@
 <pre>
   BIP: 111
+  Layer: Peer Services
   Title: NODE_BLOOM service bit
-  Author: Matt Corallo <bip@bluematt.me>, Peter Todd <pete@petertodd.org>
-  Status: Draft
-  Type: Standards Track
-  Created: 2015-08-20
+  Authors: Matt Corallo <bip111@bluematt.me>
+           Peter Todd <pete@petertodd.org>
+  Status: Deployed
+  Type: Specification
+  Assigned: 2015-08-20
+  License: PD
 </pre>
 
 == Abstract ==

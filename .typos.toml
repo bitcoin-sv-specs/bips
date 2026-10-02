@@ -1,0 +1,45 @@
+[default]
+extend-ignore-re = [
+    # NOTE: use here for regex patterns
+    "xpub.*",
+    "xprv.*",
+    "3.*", # address
+    "5.*", # address
+    "private_key .*",
+    "privkey .*",
+    "tt.*", # <tt> tags
+    "code.*", # <code> tags
+    "\\w*<sub>", # prefix for <sub> tags
+    "OP_SUCCESSx|\\d+",
+    "pay.*",
+    "ser.*",
+    "prefix.*",
+    "value: .*",
+    "pqNTRUsign",
+    "nsec1.*",
+]
+
+[default.extend-words]
+# NOTE: use here for false-positives
+anc = "anc"
+PSBT = "PSBT"
+ser = "ser"
+# Names
+Atack = "Atack"
+Falke = "Falke"
+Meni = "Meni"
+Ono = "Ono"
+Strnad = "Strnad"
+Toom = "Toom"
+
+[files]
+extend-exclude = [
+    "/*/*.csv",
+    "/*/*.d*",
+    "/*/*.go",
+    "/*/*.json",
+    "/*/*/*.json",
+    "/*/*/*/*/*/*.o",
+    "/*/*/*/*/*/*/*/*.o",
+    "/*/*.t*",
+]

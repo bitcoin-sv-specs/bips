@@ -1,10 +1,11 @@
 <pre>
   BIP: 35
+  Layer: Peer Services
   Title: mempool message
-  Author: Jeff Garzik <jgarzik@exmulti.com>
-  Status: Accepted
-  Type: Standards Track
-  Created: 2012-08-16
+  Authors: Jeff Garzik <jgarzik@exmulti.com>
+  Status: Deployed
+  Type: Specification
+  Assigned: 2012-08-16
 </pre>
 
 ==Abstract==
@@ -13,7 +14,7 @@ Make a network node's transaction memory pool accessible via a new "mempool" mes
 
 ==Motivation==
 
-Several use cases make it desireable to expose a network node's transaction memory pool:
+Several use cases make it desirable to expose a network node's transaction memory pool:
 # SPV clients, wishing to obtain zero-confirmation transactions sent or received.
 # Miners, to avoid missing lucrative fees, downloading existing network transactions after a restart.
 # Remote network diagnostics.
@@ -21,7 +22,7 @@ Several use cases make it desireable to expose a network node's transaction memo
 ==Specification==
 
 # The mempool message is defined as an empty message where pchCommand == "mempool"
-# Upon receipt of a "mempool" message, the node will respond   with an "inv" message containing MSG_TX hashes of all the transactions in the node's transaction memory pool, if any.
+# Upon receipt of a "mempool" message, the node will respond with an "inv" message containing MSG_TX hashes of all the transactions in the node's transaction memory pool, if any.
 # The typical node behavior in response to an "inv" is "getdata". However, the reference Satoshi implementation ignores requests for transaction hashes outside that which is recently relayed. To support "mempool", an implementation must extend its "getdata" message support to querying the memory pool.
 # Feature discovery is enabled by checking two "version" message attributes:
 ## Protocol version >= 60002

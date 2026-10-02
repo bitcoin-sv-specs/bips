@@ -1,12 +1,21 @@
 <pre>
   BIP: 21
+  Layer: Applications
   Title: URI Scheme
-  Author: Nils Schneider <nils.schneider@gmail.com>
-          Matt Corallo <bip21@bluematt.me>
-  Status: Accepted
-  Type: Standards Track
-  Created: 2012-01-29
+  Authors: Nils Schneider <nils.schneider@gmail.com>
+           Matt Corallo <bip21@bluematt.me>
+  Status: Closed
+  Type: Specification
+  Assigned: 2012-01-29
+  Replaces: 20
+  Proposed-Replacement: 321
 </pre>
+
+=Superseded by BIP 321=
+
+This BIP has been superseded and replaced with BIP 321. Please see [[bip-0321.mediawiki|BIP 321]] instead.
+
+=Original BIP=
 
 This BIP is a modification of an earlier [[bip-0020.mediawiki|BIP 0020]] by Luke Dashjr. BIP 0020 was based off an earlier document by Nils Schneider. The alternative payment amounts in BIP 0020 have been removed.
 
@@ -34,7 +43,7 @@ Elements of the query component may contain characters outside the valid range. 
 
 === ABNF grammar ===
 
-(See also [[#Simpler syntax|a simpler representation of syntax]])
+(See also [[#simpler-syntax|a simpler representation of syntax]])
 
  bitcoinurn     = "bitcoin:" bitcoinaddress [ "?" bitcoinparams ]
  bitcoinaddress = *base58
@@ -54,12 +63,10 @@ The scheme component ("bitcoin:") is case-insensitive, and implementations must 
 
 *label: Label for that address (e.g. name of receiver)
 *address: bitcoin address
-*message: message that describes the transaction to the user ([[#Examples|see examples below]])
-*size: amount of base bitcoin units ([[#Transfer amount/size|see below]])
-*paycode: payment code (BIP-47)
+*message: message that describes the transaction to the user ([[#examples|see examples below]])
 *(others): optional, for future extensions
 
-==== Transfer amount/size ====
+==== Transfer amount ====
 
 If an amount is provided, it MUST be specified in decimal BTC.
 All amounts MUST contain no commas and use a period (.) as the separating character to separate whole numbers and decimal fractions.
@@ -68,11 +75,6 @@ I.e. amount=50.00 or amount=50 is treated as 50 BTC, and amount=50,000.00 is inv
 Bitcoin clients MAY display the amount in any format that is not intended to deceive the user.
 They SHOULD choose a format that is foremost least confusing, and only after that most reasonable given the amount requested.
 For example, so long as the majority of users work in BTC units, values should always be displayed in BTC by default, even if mBTC or TBC would otherwise be a more logical interpretation of the amount.
-
-==== Payment code ====
-
-If a URI provides a payment code, and if the client supports BIP-47, then the resulting transaction SHOULD construct a transaction per BIP-47 instead of using the address provided in the URI.
-
 == Rationale ==
 
 ===Payment identifiers, not person identifiers===
@@ -104,6 +106,8 @@ Please see the BNF grammar above for the normative syntax.
 
 === Examples ===
 
+Note: The addresses used in these examples are intentionally invalid to prevent accidental transactions.
+
 Just the address:
  bitcoin:175tWpb8K1S7NmH4Zx6rewF9WQrcZv245W
 
@@ -124,10 +128,6 @@ Some future version that has variables which are (currently) not understood but 
 
 Characters must be URI encoded properly.
 
-== Reference Implementations ==
-=== Bitcoin clients ===
-* Bitcoin-Qt supports the old version of Bitcoin URIs (ie without the req- prefix), with Windows and KDE integration as of commit 70f55355e29c8e45b607e782c5d76609d23cc858.
+== Reference Implementation ==
 
-==References==
-
-* [[bip-0047.mediawiki|BIP47 - Reusable Payment Codes for Hierarchical Deterministic Wallets]]
+Bitcoin-Qt supports the old version of Bitcoin URIs (ie without the req- prefix), with Windows and KDE integration as of commit 70f55355e29c8e45b607e782c5d76609d23cc858.

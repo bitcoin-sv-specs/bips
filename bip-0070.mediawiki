@@ -1,10 +1,12 @@
 <pre>
   BIP: 70
+  Layer: Applications
   Title: Payment Protocol
-  Authors: Gavin Andresen <gavinandresen@gmail.com>, Mike Hearn <mhearn@bitcoinfoundation.org>
-  Status: Final
-  Type: Standards Track
-  Created: 2013-07-29
+  Authors: Gavin Andresen <gavinandresen@gmail.com>
+           Mike Hearn <mhearn@bitcoinfoundation.org>
+  Status: Deployed
+  Type: Specification
+  Assigned: 2013-07-29
 </pre>
 
 ==Abstract==
@@ -258,7 +260,7 @@ occurs.
 
 Trusted root certificates may be obtained from the operating system;
 if validation is done on a device without an operating system, the
-[http://www.mozilla.org/projects/security/certs/included/index.html Mozilla root store] is recommended.
+[https://www.mozilla.org/about/governance/policies/security-group/certs/policy/ Mozilla root store] is recommended.
 
 ==Extensibility==
 
@@ -298,7 +300,7 @@ Protocol Buffers : https://developers.google.com/protocol-buffers/
 
 ==Reference implementation==
 
-Create Payment Request generator : https://bitcoincore.org/~gavin/createpaymentrequest.php ([[https://github.com/gavinandresen/paymentrequest|source]])
+Create Payment Request generator : https://developer.bitcoin.org/examples/payment_processing.html ([[https://github.com/gavinandresen/paymentrequest|source]])
 
 BitcoinJ : https://bitcoinj.github.io/payment-protocol#introduction
 
@@ -310,7 +312,7 @@ http://datatracker.ietf.org/wg/jose/
 Wikipedia's page on Invoices: http://en.wikipedia.org/wiki/Invoice
 especially the list of Electronic Invoice standards
 
-sipa's payment protocol proposal: https://gist.github.com/1237788
+sipa's payment protocol proposal: https://gist.github.com/sipa/1237788
 
 ThomasV's "Signed Aliases" proposal : http://ecdsa.org/bitcoin_URIs.html
 

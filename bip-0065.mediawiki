@@ -1,10 +1,12 @@
 <pre>
   BIP: 65
+  Layer: Consensus (soft fork)
   Title: OP_CHECKLOCKTIMEVERIFY
-  Author: Peter Todd <pete@petertodd.org>
-  Status: Draft
-  Type: Standards Track
-  Created: 2014-10-01
+  Authors: Peter Todd <pete@petertodd.org>
+  Status: Deployed
+  Type: Specification
+  Assigned: 2014-10-01
+  License: PD
 </pre>
 
 ==Abstract==
@@ -16,11 +18,17 @@ some point in the future.
 
 ==Summary==
 
-CHECKLOCKTIMEVERIFY redefines the existing NOP2 opcode. When executed it
-compares the top item on the stack to the nLockTime field of the transaction
-containing the scriptSig. If that top stack item is greater than the transaction's
-nLockTime field the script fails immediately, otherwise script evaluation continues
-as though a NOP was executed.
+CHECKLOCKTIMEVERIFY redefines the existing NOP2 opcode. When executed, if
+any of the following conditions are true, the script interpreter will terminate
+with an error:
+
+* the stack is empty; or
+* the top item on the stack is less than 0; or
+* the lock-time type (height vs. timestamp) of the top stack item and the nLockTime field are not the same; or
+* the top stack item is greater than the transaction's nLockTime field; or
+* the nSequence field of the txin is 0xffffffff;
+
+Otherwise, script execution will continue as if a NOP had been executed.
 
 The nLockTime field in a transaction prevents the transaction from being mined
 until either a certain block height, or block time, has been reached. By
@@ -84,7 +92,7 @@ There exist a number of protocols where a transaction output is created that
 requires the co-operation of both parties to spend the output. To ensure the
 failure of one party does not result in the funds becoming lost, refund
 transactions are setup in advance using nLockTime. These refund transactions
-need to be created interactively, and additionaly, are currently vulnerable to
+need to be created interactively, and additionally, are currently vulnerable to
 transaction malleability. CHECKLOCKTIMEVERIFY can be used in these protocols,
 replacing the interactive setup with a non-interactive setup, and additionally,
 making transaction malleability a non-issue.
@@ -92,7 +100,7 @@ making transaction malleability a non-issue.
 
 ====Two-factor wallets====
 
-Services like GreenAddress store Bitcoins with 2-of-2 multisig scriptPubKey's
+Services like GreenAddress store bitcoins with 2-of-2 multisig scriptPubKey's
 such that one keypair is controlled by the user, and the other keypair is
 controlled by the service. To spend funds the user uses locally installed
 wallet software that generates one of the required signatures, and then uses a
@@ -126,7 +134,7 @@ transaction is created, tx3, to ensure that should the payee vanish the payor
 can get their deposit back. The process by which the refund transaction is
 created is currently vulnerable to transaction malleability attacks, and
 additionally, requires the payor to store the refund. Using the same
-scriptPubKey from as in the Two-factor wallets example solves both these issues.
+scriptPubKey form as in the Two-factor wallets example solves both these issues.
 
 
 ===Trustless Payments for Publishing Data===
@@ -160,7 +168,7 @@ Proving the sacrifice of some limited resource is a common technique in a
 variety of cryptographic protocols. Proving sacrifices of coins to mining fees
 has been proposed as a ''universal public good'' to which the sacrifice could
 be directed, rather than simply destroying the coins. However doing so is
-non-trivial, and even the best existing technqiue - announce-commit sacrifices
+non-trivial, and even the best existing technique - announce-commit sacrifices
 - could encourage mining centralization. CHECKLOCKTIMEVERIFY can be used to
 create outputs that are provably spendable by anyone (thus to mining fees
 assuming miners behave optimally and rationally) but only at a time
@@ -195,18 +203,19 @@ transaction output ''can'' be spent.
 Refer to the reference implementation, reproduced below, for the precise
 semantics and detailed rationale for those semantics.
 
+
     case OP_NOP2:
     {
         // CHECKLOCKTIMEVERIFY
         //
         // (nLockTime -- nLockTime )
-    
+
         if (!(flags & SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY))
             break; // not enabled; treat as a NOP
-    
+
         if (stack.size() < 1)
             return false;
-    
+
         // Note that elsewhere numeric opcodes are limited to
         // operands in the range -2**31+1 to 2**31-1, however it is
         // legal for opcodes to produce results exceeding that
@@ -222,13 +231,13 @@ semantics and detailed rationale for those semantics.
         // to 5-byte bignums, which are good until 2**32-1, the
         // same limit as the nLockTime field itself.
         const CScriptNum nLockTime(stacktop(-1), 5);
-    
+
         // In the rare event that the argument may be < 0 due to
         // some arithmetic being done first, you can always use
         // 0 MAX CHECKLOCKTIMEVERIFY.
         if (nLockTime < 0)
             return false;
-    
+
         // There are two types of nLockTime: lock-by-blockheight
         // and lock-by-blocktime, distinguished by whether
         // nLockTime < LOCKTIME_THRESHOLD.
@@ -241,12 +250,12 @@ semantics and detailed rationale for those semantics.
               (txTo.nLockTime >= LOCKTIME_THRESHOLD && nLockTime >= LOCKTIME_THRESHOLD)
              ))
             return false;
-    
+
         // Now that we know we're comparing apples-to-apples, the
         // comparison is a simple numeric one.
         if (nLockTime > (int64_t)txTo.nLockTime)
             return false;
-    
+
         // Finally the nLockTime feature can be disabled and thus
         // CHECKLOCKTIMEVERIFY bypassed if every txin has been
         // finalized by setting nSequence to maxint. The
@@ -259,9 +268,9 @@ semantics and detailed rationale for those semantics.
         // required to prove correct CHECKLOCKTIMEVERIFY execution.
         if (txTo.vin[nIn].IsFinal())
             return false;
-    
+
         break;
-    
+
     }
 
 https://github.com/petertodd/bitcoin/commit/ab0f54f38e08ee1e50ff72f801680ee84d0f1bf4
@@ -270,7 +279,7 @@ https://github.com/petertodd/bitcoin/commit/ab0f54f38e08ee1e50ff72f801680ee84d0f
 ==Deployment==
 
 We reuse the double-threshold IsSuperMajority() switchover mechanism used in
-BIP 66 with the same thresholds, but for nVersion = 4. The new rules are
+BIP66 with the same thresholds, but for nVersion = 4. The new rules are
 in effect for every block (at height H) with nVersion = 4 and at least
 750 out of 1000 blocks preceding it (with heights H-1000..H-1) also
 have nVersion >= 4. Furthermore, when 950 out of the 1000 blocks
@@ -301,20 +310,24 @@ time.
 
 ==References==
 
-PayPub - https://github.com/unsystem/paypub
+PayPub
 
-Jeremy Spilman Payment Channels - https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-April/002433.html
+* https://github.com/unsystem/paypub
+
+Jeremy Spilman Payment Channels
+
+* https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-April/002433.html
 
 
 ==Implementations==
 
 Python / python-bitcoinlib
 
-- https://github.com/petertodd/checklocktimeverify-demos
+* https://github.com/petertodd/checklocktimeverify-demos
 
 JavaScript / Node.js / bitcore
 
-- https://github.com/mruddy/bip65-demos
+* https://github.com/mruddy/bip65-demos
 
 
 ==Copyright==

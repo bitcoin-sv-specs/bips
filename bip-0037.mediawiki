@@ -1,10 +1,15 @@
 <pre>
   BIP: 37
+  Layer: Peer Services
   Title: Connection Bloom filtering
-  Author: Mike Hearn <hearn@google.com>, Matt Corallo <bip@bluematt.me>
-  Status: Accepted
-  Type: Standards Track
-  Created: 2012-10-24
+  Authors: Mike Hearn <hearn@google.com>
+           Matt Corallo <bip37@bluematt.me>
+  Comments-Summary: No comments yet.
+  Comments-URI: https://github.com/bitcoin/bips/wiki/Comments:BIP-0037
+  Status: Deployed
+  Type: Specification
+  Assigned: 2012-10-24
+  License: PD
 </pre>
 
 ==Abstract==
@@ -154,7 +159,7 @@ A ''Merkle tree'' is a way of arranging a set of items as leaf nodes of tree in 
 ** Check whether this node corresponds to a leaf node (transaction) that is to be included OR any parent thereof:
 *** If so, append a '1' bit to the flag bits
 *** Otherwise, append a '0' bit.
-** Check whether this node is a internal node (non-leaf) AND is the parent of an included leaf node:
+** Check whether this node is an internal node (non-leaf) AND is the parent of an included leaf node:
 *** If so:
 **** Descend into its left child node, and process the subtree beneath it entirely (depth-first).
 **** If this node has a right child node too, descend into it as well.

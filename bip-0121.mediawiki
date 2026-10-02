@@ -1,10 +1,11 @@
 <pre>
   BIP: 121
+  Layer: Applications
   Title: Proof of Payment URI scheme
-  Author: Kalle Rosenbaum <kalle@rosenbaum.se>
-  Status: Draft
-  Type: Standards Track
-  Created: 2015-07-27
+  Authors: Kalle Rosenbaum <kalle@rosenbaum.se>
+  Status: Closed
+  Type: Specification
+  Assigned: 2015-07-27
 </pre>
 
 == Abstract ==

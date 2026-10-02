@@ -1,10 +1,12 @@
 <pre>
   BIP: 130
+  Layer: Peer Services
   Title: sendheaders message
-  Author: Suhas Daftuar <sdaftuar@chaincode.com>
-  Status: Draft
-  Type: Standards Track
-  Created: 2015-05-08
+  Authors: Suhas Daftuar <sdaftuar@chaincode.com>
+  Status: Deployed
+  Type: Specification
+  Assigned: 2015-05-08
+  License: PD
 </pre>
 
 ==Abstract==

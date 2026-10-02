@@ -1,10 +1,11 @@
 <pre>
   BIP: 31
+  Layer: Peer Services
   Title: Pong message
-  Author: Mike Hearn <hearn@google.com>
-  Status: Accepted
-  Type: Standards Track
-  Created: 2012-04-11
+  Authors: Mike Hearn <hearn@google.com>
+  Status: Deployed
+  Type: Specification
+  Assigned: 2012-04-11
 </pre>
 
 ==Abstract==
